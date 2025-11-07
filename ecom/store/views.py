@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -9,6 +9,24 @@ from .forms import SignUpForm
 
 
 # Create your views here.
+def product(request, pk):
+    product = Product.objects.get(id=pk)
+    return render(request, 'product.html', {'product':product})
+
+# for categories
+
+def category(request, comm):
+    #Replace Hyphrns with spces
+    comm = comm.replace('-', ' ')
+    try:
+        category = Category.objects.get(name__iexact=comm)
+        products = Product.objects.filter(category = category)
+        return render(request, 'category.html', {'products': products, 'category': category})
+    except:
+        messages.success(request, "This  category doesn't exists")
+        return redirect('home')
+
+
 def home(request):
     products = Product.objects.all()
     return render(request, 'home.html', {'products': products})
