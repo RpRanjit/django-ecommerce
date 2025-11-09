@@ -19,16 +19,43 @@
                         ${{product.price}}
                     </span>
                     ${{product.sale_price}} 
+                    <br>
+                    ID: {{product.id}}
                     {% else %} 
                     ${{product.price}} 
+                    <br>
+                    ID: {{product.id}}
                     {% endif %}
                     <br>
                     <br>
                     <a href="{% url 'home' %}" class="btn btn-secondary mt-3 ali">Home</a>
+                    <button class="btn btn-secondary mt-3" type="button" id="add-cart", value="{{product.id}}" >Add to cart</button>
                 </div>
       </div>
     </div>
   </div>
 </div>
 <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+<script>
+    $(document).on('click', '#add-cart', function(e){
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'cart_add' %}",
+            data: {
+                product_id: $('#add-cart').val(),
+                csrfmiddlewaretoken: '{{csrf_token}}',
+                action: 'post'
+            },
+            success: function(json){
+                document.getElementById("cart_quantity").textContent = json.qty
+            },
+            error: function(xhr, errmsg, err) {
+                
+            },
+        })
+    })
+</script>
+
 {% endblock content %}
