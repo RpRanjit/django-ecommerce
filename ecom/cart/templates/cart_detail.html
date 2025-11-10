@@ -5,10 +5,65 @@
     <div class="text-center text-white">
       <h1 class="display-4 fw-bolder">Shopping Cart</h1>
       <p class="lead fw-normal text-white-50 mb-0">
-        View yours cart
+        View your cart
       </p>
     </div>
   </div>
 </header>
-<br><br><br><br><br><br><br><br><br><br>
+<br>
+<div class="container">
+  {% if cart_products %}
+    {% for product in cart_products %}
+    <div class="card mb-3">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="Image not available..." />
+        </div>
+        <div class="col-md-8">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description }}</p>
+            
+            {% if product.is_sale %}
+            <span class="text-muted text-decoration-line-through">${{ product.price }}</span>
+            ${{ product.sale_price }}
+            {% else %}
+            ${{ product.price }}
+            {% endif %}
+
+            <br><br>
+            
+            <!-- Quantity Section - Fixed -->
+            <div class="row justify-content-center">
+              <div class="col-md-2">Quantity:</div>
+              <div class="col-md-2">
+                <select class="form-select form-select-sm" id="qty-cart
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+            </div>
+            <!-- End Quantity Section -->
+
+            <br>
+            <div class="btn-group" role="group">
+              <a href="{% url 'home' %}" class="btn btn-secondary">Home</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="text-center">
+      <h3>The Cart is empty.</h3>
+      <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Home</a>
+    </div>
+  {% endif %}
+</div>
+
+<br><br><br><br><br><br><br><br><br>
 {% endblock content %}
