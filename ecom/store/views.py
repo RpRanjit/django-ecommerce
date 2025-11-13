@@ -5,10 +5,27 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import forms
-from .forms import SignUpForm
+from .forms import SignUpForm, UpdateUserForm
 
 
 # Create your views here.
+def user_update(request):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id = request.user.id)
+        user_form = UpdateUserForm(request.POST or None, instance=current_user)
+
+        if user_form.is_valid():
+            user_form.save()
+
+            login(request, current_user)
+            messages.success(request, "User is updated successfully.")
+            return redirect('home')
+        return render(request, 'user_update.html', {'user_form': user_form})
+    else:
+        messages.success(request, "User must login to access it.")
+        return redirect('home')
+        
+
 def product(request, pk):
     product = Product.objects.get(id=pk)
     return render(request, 'product.html', {'product':product})
@@ -25,6 +42,10 @@ def category(request, comm):
     except:
         messages.success(request, "This  category doesn't exists")
         return redirect('home')
+    
+def categroy_summary(request):
+    categories = Category.objects.all()
+    return render(request, 'category_summary.html', {'categories': categories})
 
 
 def home(request):

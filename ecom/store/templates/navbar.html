@@ -9,7 +9,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Category</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'home' %}">All products</a></li>
+                                <li><a class="dropdown-item" href="{% url 'category_summary' %}">All products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li><a class="dropdown-item" href="{% url 'category' 'Paintings' %}">Paintings</a></li>
                                 <li><a class="dropdown-item" href="{% url 'category' 'Animated-Pic' %}">Animated Pic</a></li>
@@ -25,6 +25,7 @@
                     </form>
                     {% if user.is_authenticated %}
                         <a href="{% url 'logout' %}"><button class="btn btn-secondary mx-2" type="submit">Logout</button></a>
+                        <a href="{% url 'user_update' %}"><button class="btn btn-secondary mx-2" type="submit">Profile</button></a>
                     {% else %}
                     <a href="{% url 'login' %}"><button class="btn btn-secondary mx-2" type="submit">Login</button></a>
                     <a href="{% url 'register' %}"><button class="btn btn-secondary mx-0" type="submit">Register</button></a>
