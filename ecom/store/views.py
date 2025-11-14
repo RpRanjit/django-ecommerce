@@ -3,12 +3,33 @@ from .models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from django.forms import forms
-from .forms import SignUpForm, UpdateUserForm
+# from django.contrib.auth.forms import UserCreationForm
+# from django.forms import forms
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 
 
 # Create your views here.
+def update_password(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        if request.method == 'POST':
+            form = ChangePasswordForm(current_user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "You password is successfully updated.")
+                login(request, current_user)
+                return redirect('update_user')
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+                return render(request, 'update_password.html',{'form': form})
+        else:
+            form = ChangePasswordForm(current_user)
+            return render(request, 'update_password.html',{'form': form})
+    else:
+        messages.success(request,"You ust be logged in to visit this page.")
+        return redirect('home')
+
 def user_update(request):
     if request.user.is_authenticated:
         current_user = User.objects.get(id = request.user.id)
