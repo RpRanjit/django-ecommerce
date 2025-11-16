@@ -25,7 +25,15 @@
                     </form>
                     {% if user.is_authenticated %}
                         <a href="{% url 'logout' %}"><button class="btn btn-secondary mx-2" type="submit">Logout</button></a>
-                        <a href="{% url 'user_update' %}"><button class="btn btn-secondary mx-2" type="submit">Profile</button></a>
+                        <li class="nav-item dropdown text-white list-unstyled">
+                                <button class="nav-link dropdown-toggle btn btn-secondary px-3 py-2" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile</button></a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'user_update' %}">User Profile</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="{% url 'update_info' %}">User Info</a></li>
+                            </ul>
+
+
                     {% else %}
                     <a href="{% url 'login' %}"><button class="btn btn-secondary mx-2" type="submit">Login</button></a>
                     <a href="{% url 'register' %}"><button class="btn btn-secondary mx-0" type="submit">Register</button></a>
