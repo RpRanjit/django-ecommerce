@@ -5,9 +5,27 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
-
+from django.db.models import Q
+import json
+from cart.cart import Cart
 
 # Create your views here.
+def search(request):
+	# Determine if they filled out the form
+	if request.method == "POST":
+		searched = request.POST['searched']
+		# Query The Products DB Model
+		searched = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains =searched))
+		# Test for null
+		if not searched:
+			messages.success(request, "That Product Does Not Exist...Please try Again.")
+			return render(request, "search.html", {})
+		else:
+			return render(request, "search.html", {'searched':searched})
+	else:
+		return render(request, "search.html", {})	
+
+
 
 def update_info(request):
 	if request.user.is_authenticated:
@@ -99,6 +117,22 @@ def login_view(request):
         user = authenticate(request, username =username, password = password)
         if user is not None:
             login(request, user)
+
+            # Do some sopping cart stuff
+            current_user = Profile.objects.get(user__id = request.user.id)
+            # get their saved cart from db
+            saved_cart = current_user.old_cart
+
+            # Convert database string to python dictionary using json
+            if saved_cart:
+                converted_cart = json.loads(saved_cart)
+                 # Add the loaded cart dictionary to our session
+                 # Get the cart
+                cart = Cart(request)
+                #  loop through the cart and add the items from the database
+                for key, value in converted_cart.items():
+                     cart.db_add(product = key, quantity = value)
+
             messages.success(request, "You have been logged in.")
             return redirect('home')
         else:
