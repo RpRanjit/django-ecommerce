@@ -1,4 +1,5 @@
 {% extends "base.html" %} {% block content %}
+
 <!-- Header-->
 <header class="bg-dark py-5">
   <div class="container px-4 px-lg-5 my-5">
@@ -14,13 +15,13 @@
 <div class="container">
   {% if cart_products %}
     {% for product in cart_products %}
-    <div class="card mb-3">
-      <div class="row g-0">
-        <div class="col-md-4">
-          <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="Image not available..." />
-        </div>
-        <div class="col-md-8">
-          <div class="card-body text-center">
+    <div class="card mb-4 cart-card">
+  <div class="row g-0">
+    <div class="col-md-6">
+      <img src="{{ product.image.url }}" class="img-fluid rounded-start cart-img" style="height: 300px; width: 400px;" alt="Image not available..." />
+    </div>
+    <div class="col-md-6">
+      <div class="card-body text-center cart-body">
             <h5 class="card-title">{{ product.name }}</h5>
             <p class="card-text">{{ product.description }}</p>
             
@@ -64,7 +65,10 @@
       </div>
     </div>
     {% endfor %}
-   <h2><strong>Total: ${{totals}}</strong></h2> 
+    <div class="container text-end">
+  <h3><strong>Total: ${{totals}}</strong></h3> 
+  <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
+</div>
   {% else %}
     <div class="text-center">
       <h3>The Cart is empty.</h3>
