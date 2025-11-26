@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from store.models import Product
+from django.db.models.signals import post_save
 # Create your models here.
 class ShippingAddress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null= True)
@@ -19,6 +20,14 @@ class ShippingAddress(models.Model):
     def __str__(self):
         return f"Shipping Address - {str(self.id)}"
 
+# Create a user Shipping Address by default when user sign up
+def create_shipping(sender, created, instance, **kwargs):
+    if created:
+        user_shipping = ShippingAddress(user = instance)
+        user_shipping.save()
+
+#Automate the profile things
+post_save.connect(create_shipping, sender=User)
 
 #Create Order Model
 class Order(models.Model):

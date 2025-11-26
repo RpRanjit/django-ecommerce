@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Billing info</h1>
+      <p class="lead fw-normal text-white-50 mb-0">
+        Enter Your credentials for payment.
+      </p>
+    </div>
+  </div>
+</header>
+
+<br>
+
+<div class="container">
+  <div class="row d-flex">
+
+    <!-- LEFT SIDE: Order Info + Shipping Info -->
+    <div class="col-lg-6">
+
+      <!-- ORDER INFO -->
+      <div class="card mb-4">
+        <div class="card-header">Order Info</div>
+        <div class="card-body">
+
+          {% for product in cart_products %}
+            <strong>{{ product.name }}</strong><br>
+
+            {% if product.is_sale %}
+              ${{ product.sale_price }}
+            {% else %}
+              ${{ product.price }}
+            {% endif %}
+            <br>
+
+            Quantity:
+            {% for key, value in quantities.items %}
+              {% if key == product.id|slugify %}
+                {{ value }}
+              {% endif %}
+            {% endfor %}
+
+            <hr>
+          {% endfor %}
+
+          <h4><strong>Total: {{ totals }}</strong></h4>
+          <br>
+
+          <a href="{% url 'cart_detail' %}" class="btn btn-sm btn-outline-secondary">
+            Update Cart
+          </a>
+
+        </div>
+      </div>
+
+      <!-- SHIPPING INFO -->
+      <div class="card mb-4">
+        <div class="card-header">Shipping Info</div>
+        <div class="card-body">
+
+          <table class="table">
+            <tbody>
+              <tr><td>Name</td><td>{{ shipping_info.shipping_full_name }}</td></tr>
+              <tr><td>Email</td><td>{{ shipping_info.shipping_email }}</td></tr>
+              <tr><td>Address 1</td><td>{{ shipping_info.shipping_address1 }}</td></tr>
+              <tr><td>Address 2</td><td>{{ shipping_info.shipping_address2 }}</td></tr>
+              <tr><td>City</td><td>{{ shipping_info.shipping_city }}</td></tr>
+              <tr><td>State</td><td>{{ shipping_info.shipping_state }}</td></tr>
+              <tr><td>Zipcode</td><td>{{ shipping_info.shipping_zip_code }}</td></tr>
+              <tr><td>Country</td><td>{{ shipping_info.shipping_country }}</td></tr>
+            </tbody>
+          </table>
+
+          <a href="{% url 'checkout' %}" class="btn btn-outline-secondary">
+            Update Shipping
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE: Billing Info -->
+    <div class="col-lg-6">
+
+      <div class="card mb-4">
+        <div class="card-header">Billing Info</div>
+        <div class="card-body">
+          {{ billing_form.as_p }}
+        </div>
+      </div>
+
+      <a href="#" class="btn btn-secondary btn-lg w-100">Pay Now</a>
+
+    </div>
+
+  </div>
+</div>
+
+<br><br><br><br>
+
+{% endblock content %}

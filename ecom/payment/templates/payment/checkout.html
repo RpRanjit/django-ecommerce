@@ -40,12 +40,14 @@
     Shipping Info
   </div>
   <div class="card-body">
-    {{shipping_form.as_p}}
+    <form action="{% url 'billing_info' %}" method="POST">
+      {% csrf_token %}
+      {{shipping_form.as_p}}
+    </div>
   </div>
-</div>
-<br><br>
-<a href="#" class="btn btn-secondary">Continue To Billing</a>
-
+  <br><br>
+  <button class="btn btn-secondary" type="submit">Continue To Billing</button>
+</form>
     </div>
   </div>
 </div>
