@@ -33,7 +33,15 @@
                                 <li><hr class="dropdown-divider" /></li>
                                 <li><a class="dropdown-item" href="{% url 'update_info' %}">User Info</a></li>
                             </ul>
-
+                            {% if user.is_superuser %}
+                        <li class="nav-item dropdown text-white list-unstyled">
+                                <button class="nav-link dropdown-toggle btn btn-secondary px-3 py-2 mx-2" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Order</button></a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'shipped_dash' %}">Shippen Order</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="{% url 'not_shipped_dash' %}">Unshipped Order</a></li>
+                            </ul>
+                            {% endif %}
 
                     {% else %}
                     <a href="{% url 'login' %}"><button class="btn btn-secondary mx-2" type="submit">Login</button></a>
