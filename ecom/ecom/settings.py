@@ -12,9 +12,19 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# load our environmantal variables
+load_dotenv()
+# print("DB_NAME:", os.getenv("DB_NAME"))
+# print("DB_USER:", os.getenv("DB_USER"))
+# print("DB_PASSWORD:", os.getenv("DB_PASSWORD"))
+# print("DB_HOST:", os.getenv("DB_HOST"))
+# print("DB_PORT:", os.getenv("DB_PORT"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -76,11 +86,24 @@ WSGI_APPLICATION = 'ecom.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        # for postgresql database
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD':os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT':os.environ.get('DB_PORT'),
+        }
+        # 'default':dj_database_url.config(
+        #     default = DATABASE_URL,
+        #     conn_max_age=600 #optional, helps with performance by reusing database connections
+        # )
 }
 
 
